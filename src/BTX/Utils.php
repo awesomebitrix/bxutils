@@ -78,4 +78,7 @@ class Utils {
         return $pathToFolder;
     }
 
+    public static function getShopItemPathByItemID($itemId, $Shop) {
+        return $Shop->getPath() . '/' . Core_File::getNestingDirPath($itemId, $Shop->Site->nesting_level) . '/item_' . $itemId . '/';
+    }
 }
