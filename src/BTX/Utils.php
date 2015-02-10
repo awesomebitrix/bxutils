@@ -77,4 +77,26 @@ class Utils {
         }
         return $pathToFolder;
     }
+
+    public static function findIBlockItemsByProperty($iblock_id, $propertyCodes=array("property_code"=>"value")) {
+        $arSelect = Array("ID", "IBLOCK_ID", "NAME", "DATE_ACTIVE_FROM","PROPERTY_*");//IBLOCK_ID и ID обязательно должны быть указаны, см. описание arSelectFields выше
+        $arFilter = Array("IBLOCK_ID"=>IntVal(31), "ACTIVE_DATE"=>"Y", "ACTIVE"=>"Y", $propertyCodes);
+        try {
+            $res = \CIBlockElement::GetList(Array(), $arFilter, false, Array("nPageSize"=>50), $arSelect);
+        } catch (Exception $ex) {
+            echo $ex->getMessage();
+        }
+        $arResults = array();
+//        $arFields = array();
+//        $arProps = array();
+        while($ob = $res->GetNextElement()){
+            $arResults[] = array('FIELDS'=>$ob->GetFields(), 'PROPERTIES'=>$ob->GetProperties());
+        }
+//        self::p(        $arResults );
+        if(count($arResults)==0) {
+            return FALSE;
+        } else {
+            return $arResults;
+        }
+    }
 }
